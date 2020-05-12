@@ -1,0 +1,34 @@
+const mongoose = require('mongoose')
+
+const TodoSchema = new mongoose.Schema({
+  project: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String,
+    required: true
+  },
+  responsible: {
+    type: String,
+    required: true
+  },
+  comments: {
+    type: String,
+    required: true
+  },
+  priority: {
+    type: String,
+    required: true
+  },
+  duedate: {
+    type: String,
+    required: true
+  },
+  completed: {
+    type: Boolean,
+    required: true
+  }
+})
+
+module.exports = mongoose.model('Todo', TodoSchema)
