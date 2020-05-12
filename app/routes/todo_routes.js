@@ -2,7 +2,7 @@
 const express = require('express')
 // Passport docs: http://www.passportjs.org/docs/
 // NEED
-// const passport = require('passport')
+const passport = require('passport')
 
 // pull in Mongoose model for examples
 const Todo = require('../models/todo')
@@ -16,7 +16,7 @@ const handle404 = customErrors.handle404
 // we'll use this function to send 401 when a user tries to modify a resource
 // that's owned by someone else
 // UNCOMMENT
-// const requireOwnership = customErrors.requireOwnership
+const requireOwnership = customErrors.requireOwnership
 
 // this is middleware that will remove blank fields from `req.body`, e.g.
 // { example: { title: '', text: 'foo' } } -> { example: { text: 'foo' } }
@@ -25,14 +25,14 @@ const removeBlanks = require('../../lib/remove_blank_fields')
 // so that a token MUST be passed for that route to be available
 // it will also set `req.user`
 // REQUIRED TOKENNNN: NEED
-// const requireToken = passport.authenticate('bearer', { session: false })
+const requireToken = passport.authenticate('bearer', { session: false })
 
 // instantiate a router (mini app that only handles routes)
 const router = express.Router()
 
 // INDEX
 // GET /todos
-router.get('/todos', (req, res, next) => {
+router.get('/todos', requireToken, (req, res, next) => {
   Todo.find()
     .then(todos => {
       // `todos` will be an array of Mongoose documents
@@ -60,9 +60,9 @@ router.get('/todos/:id', (req, res, next) => {
 
 // CREATE
 // POST /todos
-router.post('/todos', (req, res, next) => {
+router.post('/todos', requireToken, (req, res, next) => {
   // set owner of new example to be current user
-// req.body.example.owner = req.user.id
+  req.body.example.owner = req.user.id
 
   Todo.create(req.body)
     // respond to succesful `create` with status 201 and JSON of new "example"
@@ -78,17 +78,17 @@ router.post('/todos', (req, res, next) => {
 
 // UPDATE
 // PATCH /todo/5a7db6c74d55bc51bdf39793
-router.patch('/todos/:id', removeBlanks, (req, res, next) => {
+router.patch('/todos/:id', requireToken, removeBlanks, (req, res, next) => {
   // if the client attempts to change the `owner` property by including a new
   // owner, prevent that by deleting that key/value pair
-  // delete req.body.todo.owner
+  delete req.body.todo.owner
 
   Todo.findById(req.params.id)
     .then(handle404)
     .then(todo => {
       // pass the `req` object and the Mongoose record to `requireOwnership`
       // it will throw an error if the current user isn't the owner
-      // requireOwnership(req, todo)
+      requireOwnership(req, todo)
 
       // pass the result of Mongoose's `.update` to the next `.then`
       return todo.updateOne(req.body)
@@ -101,12 +101,12 @@ router.patch('/todos/:id', removeBlanks, (req, res, next) => {
 
 // DESTROY
 // DELETE /todos/5a7db6c74d55bc51bdf39793
-router.delete('/todos/:id', (req, res, next) => {
+router.delete('/todos/:id', requireToken, (req, res, next) => {
   Todo.findById(req.params.id)
     .then(handle404)
     .then(todo => {
       // throw an error if current user doesn't own `example`
-      // requireOwnership(req, todo)
+      requireOwnership(req, todo)
       // delete the example ONLY IF the above didn't throw
       todo.deleteOne()
     })

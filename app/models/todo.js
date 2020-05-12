@@ -28,7 +28,15 @@ const TodoSchema = new mongoose.Schema({
   completed: {
     type: Boolean,
     required: true
+  },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   }
-})
+}, {
+  timestamps: true
+}
+)
 
 module.exports = mongoose.model('Todo', TodoSchema)
