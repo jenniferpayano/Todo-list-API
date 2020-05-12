@@ -62,12 +62,11 @@ router.get('/todos/:id', (req, res, next) => {
 // POST /todos
 router.post('/todos', requireToken, (req, res, next) => {
   // set owner of new example to be current user
-  req.body.example.owner = req.user.id
-
-  Todo.create(req.body)
+  req.body.todo.owner = req.user.id
+  console.log(req.body)
+  Todo.create(req.body.todo)
     // respond to succesful `create` with status 201 and JSON of new "example"
     .then(todo => {
-      console.log(todo)
       res.status(201).json({ todo: todo.toObject() })
     })
     // if an error occurs, pass it off to our error handler
