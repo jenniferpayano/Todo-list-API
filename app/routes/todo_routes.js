@@ -48,12 +48,12 @@ router.get('/todos', requireToken, (req, res, next) => {
 
 // SHOW
 // GET /todos/5a7db6c74d55bc51bdf39793
-router.get('/todos/:id', (req, res, next) => {
+router.get('/todos/:id', requireToken, (req, res, next) => {
   // req.params.id will be set based on the `:id` in the route
   Todo.findById(req.params.id)
     .then(handle404)
     // if `findById` is succesful, respond with 200 and "example" JSON
-    .then(todo => res.status(200).json({ todos: todo.toObject() }))
+    .then(todo => res.status(200).json({ todo: todo.toObject() }))
     // if an error occurs, pass it to the handler
     .catch(next)
 })
@@ -81,16 +81,14 @@ router.patch('/todos/:id', requireToken, removeBlanks, (req, res, next) => {
   // if the client attempts to change the `owner` property by including a new
   // owner, prevent that by deleting that key/value pair
   delete req.body.todo.owner
-
   Todo.findById(req.params.id)
     .then(handle404)
     .then(todo => {
       // pass the `req` object and the Mongoose record to `requireOwnership`
       // it will throw an error if the current user isn't the owner
       requireOwnership(req, todo)
-
       // pass the result of Mongoose's `.update` to the next `.then`
-      return todo.updateOne(req.body)
+      return todo.updateOne(req.body.todo)
     })
     // if that succeeded, return 204 and no JSON
     .then(() => res.sendStatus(204))
