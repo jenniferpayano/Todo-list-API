@@ -38,10 +38,10 @@ router.get('/todos', requireToken, (req, res, next) => {
       // `todos` will be an array of Mongoose documents
       // we want to convert each one to a POJO, so we use `.map` to
       // apply `.toObject` to each one
-      return todos.map(todos => todos.toObject())
+      return todos.map(todo => todo.toObject())
     })
     // respond with status 200 and JSON of the todos
-    .then(todos => res.status(200).json({ todo: todos }))
+    .then(todos => res.status(200).json({ todos: todos }))
     // if an error occurs, pass it to the handler
     .catch(next)
 })
