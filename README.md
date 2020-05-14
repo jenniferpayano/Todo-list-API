@@ -72,7 +72,7 @@ Set up and Installation
 -----------------------
 - Download this template.
 - Move the .zip file to your directory and Unzip it (creating a folder) -- NOTE: if the folder was already unzipped, use the mv command line to move it to directory
-- Install dependencies with npm install.
+- Install dependencies with `npm install`.
 - Ensure that you have nodemon installed by running `npm install -g nodemon`.
 - Ensure the API is functioning properly by running `npm run server`.
 
