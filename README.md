@@ -8,6 +8,8 @@ Task Assigner-API
 * User Stories
 * ERD
 * Technology
+* Catalog of Routes
+* Set Up and Installation
 * Unsolved Problems
 * Creator
 
@@ -53,6 +55,26 @@ https://imgur.com/a/Sysq1no
 TECHNOLOGY
 ------------
 - Express
+
+Catalog of Routes
+------------------
+
+Verb         |	URI Pattern
+------------ | -------------
+GET | /todos
+GET | /todos/:id
+POST | /todos
+PATCH | /todos/:id
+DELETE | /todos/:id
+
+
+Set up and Installation
+-----------------------
+- Download this template.
+- Move the .zip file to your directory and Unzip it (creating a folder) -- NOTE: if the folder was already unzipped, use the mv command line to move it to directory
+- Install dependencies with npm install.
+- Ensure that you have nodemon installed by running `npm install -g nodemon`.
+- Ensure the API is functioning properly by running `npm run server`.
 
 UNSOLVED PROBLEMS
 -----------------
