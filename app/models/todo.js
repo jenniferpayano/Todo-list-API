@@ -14,8 +14,7 @@ const TodoSchema = new mongoose.Schema({
     required: true
   },
   comments: {
-    type: String,
-    required: true
+    type: String
   },
   priority: {
     type: String,
