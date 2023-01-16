@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "start:dev": "node server.js",
     "test": "mocha --exit",
     "server": "nodemon server.js",
     "serve": "nodemon server.js",
